@@ -17,8 +17,12 @@ import javax.swing.*;
 
 
 /**
-* Represents a singular day with 4 variables
-* @param theData
+* This is the view part. Starts by making everything
+* @param theData this is the model class
+* @param cal this is the Gregorian calendar that we will pull info from
+* @param monthYear this is simply just the month and year in MM/YYYY format
+* @param dayViewDate is the day and the month in DD/MM format
+* @param selectedDay this is the day we are selecting
 */
 
 public class CalendarView extends JFrame implements ChangeListener{
@@ -213,6 +217,13 @@ public class CalendarView extends JFrame implements ChangeListener{
 		
 	}
 
+	/**
+	 *@populateMonthView
+	 * populates the month view with buttons that updates everything
+	 * @param monthViewPanel this panel will get filled with buttons
+	 * @precondition monthViewPanel exists
+	 * @postcondition monthViewPanel is now filled with buttons
+	 * **/
 	private void populateMonthView(JPanel monthViewPanel)
 	{
 		//deletes everything here first because this will get called again
@@ -283,13 +294,25 @@ public class CalendarView extends JFrame implements ChangeListener{
 		}
 	}
 	
-	
+	/**
+	 *@stateChanged
+	 * this is what is called from the model that it has been changed
+	 * @param e this is the changeevent
+	 * @precondition None
+	 * @postcondition the gregorian calendar is now updated
+	 * **/
 	public void stateChanged(ChangeEvent e) {
 		cal = theData.getData();
 		this.repaint(); //we call repaint because this is a Jframe which can do that
 		
 	}
 
+	/**
+	 *@createEventBox
+	 * Creates the create an event box frame.
+	 * @precondition None
+	 * @postcondition potentiall a new event is added to the hashmap in the model
+	 * **/
 	private void createEventBox()
 	{
 	

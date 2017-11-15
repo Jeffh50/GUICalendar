@@ -17,7 +17,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.*;
 
-public class CalendarTester {
+public class SimpleCalendar {
 
 	//this is the main tester
 	public static void main(String args[])

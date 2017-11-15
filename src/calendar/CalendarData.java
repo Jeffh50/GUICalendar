@@ -20,8 +20,12 @@ import javax.swing.event.ChangeListener;
 public class CalendarData {
 
 	
-	//this is the model/subject
-	
+	/**
+	 * this is the model/subject
+	 * @param cal this is the gregorian calendar we will pull information from
+	 * @param listeners this holds all the VIEWS. but it will only hold one in this case
+	 * @param createdDays this holds a map of all createdDays.
+	 */
 	
 	private GregorianCalendar cal;
 	private ArrayList<ChangeListener> listeners;
@@ -61,6 +65,12 @@ public class CalendarData {
 		return createdDays;
 	}
 	
+	/**
+	 * @load
+	 * this loads a previously created "events.txt" into our current calendar
+	 * @precondition There should be an events.txt already there otherwise it wont do anything
+	 * @postcondition The calendar now has a filled out arrayList
+	 */
 	public void load() 
 	{
 		File f = new File("events.txt");
@@ -80,6 +90,12 @@ public class CalendarData {
 			
 	}
 	
+	/**
+	 * @quit
+	 * quits the program while saving all of the current events into a text file called "events.txt"
+	 * @precondition None
+	 * @postcondition All current events are saved into "events.txt" and the program quits
+	 */
 	public void quit()
 	{
 
