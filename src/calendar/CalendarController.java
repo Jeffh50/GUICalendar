@@ -19,13 +19,17 @@ import javax.swing.*;
 
 public class CalendarController {
 
-	
+	/**
+	 * Is the controller. Does the attaching and calls the loading of events
+	 * 
+	 */
 	CalendarController()
 	{
 		GregorianCalendar cal = new GregorianCalendar();
 		CalendarData data = new CalendarData(cal);
 		CalendarView view = new CalendarView(data);
 		data.attach(view);
+		data.load();
 	}
 	
 	

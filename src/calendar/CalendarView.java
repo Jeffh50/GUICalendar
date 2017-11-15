@@ -2,18 +2,24 @@ package calendar;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.awt.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.TreeMap;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.*;
+
+
+/**
+* Represents a singular day with 4 variables
+* @param theData
+*/
 
 public class CalendarView extends JFrame implements ChangeListener{
 
@@ -105,22 +111,24 @@ public class CalendarView extends JFrame implements ChangeListener{
 							theData.update();
 							monthYear.setText("Month:" + (cal.get(Calendar.MONTH) + 1) + "  Year:" + cal.get(Calendar.YEAR));;
 							dayViewDate.setText("DD/MM: " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1));;
-							eventDisplay.update(eventDisplay.getGraphics());
+							
 							
 							//changing selected day
-							String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.YEAR);
+							String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.DAY_OF_MONTH);
 							
 							
-							if(!theData.getDays().containsKey(theKey))
+							if(theData.getDays().containsKey(theKey) == false)
 							{
-								selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+								selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 								theData.getDays().put(theKey, selectedDay);
 							}
 							else //the day is already in there thus we will just retrieve it
 							{
 								selectedDay = theData.getDays().get(theKey);
 							}
-							
+							//here we populate the eventDisplay with the events in the day
+							eventDisplay.setText("");
+							eventDisplay.setText(selectedDay.printAllEvents());
 							
 							//this checks if we are at the first day 
 							if(flag == true)
@@ -143,7 +151,7 @@ public class CalendarView extends JFrame implements ChangeListener{
 							theData.update();
 							monthYear.setText("Month:" + (cal.get(Calendar.MONTH) + 1) + "  Year:" + cal.get(Calendar.YEAR));;
 							dayViewDate.setText("DD/MM: " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1));;
-							eventDisplay.update(eventDisplay.getGraphics());
+							
 							//checking we we moved up a month
 							if(cal.get(Calendar.DAY_OF_MONTH) == 1)
 							{
@@ -151,29 +159,41 @@ public class CalendarView extends JFrame implements ChangeListener{
 							}
 							
 							
-							String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.YEAR);
+							String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.DAY_OF_MONTH);
 							
 							
-							if(!theData.getDays().containsKey(theKey))
+							if(theData.getDays().containsKey(theKey) == false)
 							{
-								selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+								selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 								theData.getDays().put(theKey, selectedDay);
 							}
 							else //the day is already in there thus we will just retrieve it
 							{
+
 								selectedDay = theData.getDays().get(theKey);
 							}
+							//here we populate the eventDisplay with the events in the day
+							eventDisplay.setText("");
+							eventDisplay.setText(selectedDay.printAllEvents());
 							
 						}
 					}
 			);
 		rightPanel.add(rightButton,BorderLayout.EAST);
+		//making quit button work
 		JButton quitButton = new JButton("QUIT");
+		quitButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				theData.quit();
+			}
+		});
 		rightPanel.add(quitButton,BorderLayout.SOUTH);
+	
 		
 		//this makes our current day our first selected day. No need for checking if alreayd here because it is not
 		selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH));
-		String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.YEAR); 
+		String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.DAY_OF_MONTH); 
 		theData.getDays().put(theKey, selectedDay);
 		
 		//setting the base of this to FlowLayout
@@ -235,20 +255,25 @@ public class CalendarView extends JFrame implements ChangeListener{
 								theData.update();
 								monthYear.setText("Month:" + (cal.get(Calendar.MONTH) + 1) + "  Year:" + cal.get(Calendar.YEAR));;
 								dayViewDate.setText("DD/MM: " + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1));;
-								eventDisplay.update(eventDisplay.getGraphics());
+								
 								
 								//setting the day
-								String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.YEAR);
-								if(!theData.getDays().containsKey(theKey)) //if the hashmap DOESNT have the item, add it.
+								String theKey = "" + cal.get(Calendar.YEAR) + (cal.get(Calendar.MONTH) + 1) + cal.get(Calendar.DAY_OF_MONTH);
+								if(theData.getDays().containsKey(theKey) == false) //if the hashmap DOESNT have the item, add it.
 								{
-									selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.YEAR));
+						
+									selectedDay = new CreatedDay(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH));
 									theData.getDays().put(theKey, selectedDay);
 								}
 								else //the day is already in there thus we will just retrieve it
 								{
+						
 									selectedDay = theData.getDays().get(theKey);
 								}
-							
+								
+								//here we populate the eventDisplay with the events in the day
+								eventDisplay.setText("");
+								eventDisplay.setText(selectedDay.printAllEvents());
 							}
 							
 						}
@@ -262,7 +287,6 @@ public class CalendarView extends JFrame implements ChangeListener{
 	public void stateChanged(ChangeEvent e) {
 		cal = theData.getData();
 		this.repaint(); //we call repaint because this is a Jframe which can do that
-		System.out.println("repainting now");
 		
 	}
 
@@ -272,27 +296,31 @@ public class CalendarView extends JFrame implements ChangeListener{
 		JFrame EventBox = new JFrame();
 		EventBox.setLayout(new FlowLayout());
 		
-		JTextArea eventTitle = new JTextArea("Untitled Event");
+		JTextField eventTitle = new JTextField("Untitled Event");
 		eventTitle.setSize(50, 50);
 		EventBox.add(eventTitle); //you type the event name here
 		
-		JTextArea startingTime = new JTextArea("Starting Time: HHMM format");
+		JTextField startingTime = new JTextField("Starting Time: HHMM format");
 		startingTime.setSize(50, 50);
 		EventBox.add(startingTime); //typing starting time here
 		
-		JTextArea endingTime = new JTextArea("Ending time: HHMM format");
+		JTextField endingTime = new JTextField("Ending time: HHMM format");
 		endingTime.setSize(50, 50);
 		EventBox.add(endingTime); //type ending time here
 		
 		
 		//for the add button
-		final Event theEvent = new Event(eventTitle.getText(), startingTime.getText(), endingTime.getText());
+		
 		JButton addButton = new JButton("ADD");
 		addButton.addActionListener(new ActionListener() {
 			
+			//this has to go in here, because when you press the button, it has to make the event then and there
+			
 			public void actionPerformed(ActionEvent e) {
+				final Event theEvent = new Event(eventTitle.getText(), startingTime.getText(), endingTime.getText());
 				if(selectedDay.addEvent(theEvent.getTitle(), theEvent) == true)
 				{
+					eventDisplay.setText(selectedDay.printAllEvents());
 					EventBox.dispose();
 				}
 			}
@@ -315,4 +343,6 @@ public class CalendarView extends JFrame implements ChangeListener{
 		EventBox.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		EventBox.setVisible(true);
 	}
+	
+	
 }

@@ -14,9 +14,6 @@ public class Event implements Comparable<Event>, Serializable {
 	 * @param theTitle The title of the event
 	 * @param startingTime The starting time of the event in String form
 	 * @param endingTime The ending time of the event in String form
-	 * @param theYear The year of the event
-	 * @param theMonth The month of the event
-	 * @param theDay The day of the event
 	 */
 	Event(String theTitle, String startingTime, String endingTime)
 	{
@@ -33,10 +30,10 @@ public class Event implements Comparable<Event>, Serializable {
 	 * @precondition The event should exist
 	 * @postcondition None
 	 */
-	public void printEvent()
+	public String printEvent()
 	{
-		System.out.println(startingTime + "-" + endingTime
-				+ "  " + theTitle);
+		return startingTime + "-" + endingTime
+				+ "  " + theTitle;
 	}
 	
 	/**

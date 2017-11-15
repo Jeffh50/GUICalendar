@@ -19,6 +19,7 @@ import javax.swing.*;
 
 public class CalendarTester {
 
+	//this is the main tester
 	public static void main(String args[])
 	{
 		CalendarController controller = new CalendarController();

@@ -42,12 +42,13 @@ public class CreatedDay implements Serializable{
 	 */
 	public boolean addEvent(String theTitle, Event theEvent)
 	{
-		int startingTime = Integer.parseInt(theEvent.startingTime);
-		int endingTime = Integer.parseInt(theEvent.startingTime);
+		System.out.println(theEvent.startingTime);
+		int otherStartingTime = Integer.parseInt(theEvent.startingTime);
+		int otherEndingTime = Integer.parseInt(theEvent.startingTime);
 		for(Event entry : eventsForToday)
 		{
-			int otherStartingTime = Integer.parseInt(entry.startingTime);
-			int otherEndingTime = Integer.parseInt(entry.endingTime);
+			int startingTime = Integer.parseInt(entry.startingTime);
+			int endingTime = Integer.parseInt(entry.endingTime);
 			
 			if(startingTime == otherStartingTime)
 			{
@@ -78,13 +79,15 @@ public class CreatedDay implements Serializable{
 	 * @precondition eventsForToday should not be empty
 	 * @postcondition None
 	 */
-	public void printAllEvents()
+	public String printAllEvents()
 	{
+		String allText = "";
 		for(Event entry : eventsForToday)
 		{
 			Event theEvent = entry;
-			theEvent.printEvent();
+			allText += theEvent.printEvent() + "\n";
 		}
+		return allText;
 	}
 	
 	public int compareTo(CreatedDay theDay)
